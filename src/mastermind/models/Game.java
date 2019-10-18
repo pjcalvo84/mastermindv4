@@ -5,7 +5,7 @@ import java.util.List;
 
 import mastermind.types.Color;
 
-public class Game {
+public class Game{
 
 	private static final int MAX_LONG = 10;
 
@@ -34,6 +34,10 @@ public class Game {
 		this.results.add(this.secretCombination.getResult(proposedCombination));
 		this.attempts++;
 	}
+
+    int getGameWidth() {
+        return Combination.getWidth();
+    }
 
 	public boolean isLooser() {
 		return this.attempts == Game.MAX_LONG;

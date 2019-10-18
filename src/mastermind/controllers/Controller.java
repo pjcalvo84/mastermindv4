@@ -2,17 +2,16 @@ package mastermind.controllers;
 
 import mastermind.models.Combination;
 import mastermind.models.Game;
+import mastermind.models.Session;
 
 public abstract class Controller {
 
-	protected Game game;
+	protected Session session;
 
-	Controller(Game game) {
-		this.game = game;
+	Controller(Session session) {
+		this.session = session;
 	}
 
-	public int getWidth() {
-		return Combination.getWidth();
-	}
+    public abstract void control();
 
 }

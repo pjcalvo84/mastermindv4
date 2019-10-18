@@ -1,35 +1,42 @@
 package mastermind;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import mastermind.controllers.Controller;
 import mastermind.controllers.ProposalController;
 import mastermind.controllers.ResumeController;
 import mastermind.controllers.StartController;
-import mastermind.models.Game;
-import mastermind.views.View;
+import mastermind.models.Session;
+import mastermind.models.StateValue;
 
-public abstract class Mastermind {
 
-	private Game game;
-	
-	private StartController startController;
+public class Mastermind {
 
-	private ProposalController proposalController;
+    Session session;
+    Map<StateValue, Controller> controllers;
 
-	private ResumeController resumeController;
-	
-	private View view;
+    private Mastermind() {
+        this.session = new Session();
+        this.controllers = new HashMap<>();
+        controllers.put(StateValue.INITIAL, new StartController(session));
+        controllers.put(StateValue.IN_GAME, new ProposalController(session));
+        controllers.put(StateValue.FINAL, new ResumeController(session));
+        controllers.put(StateValue.EXIT, null);
+    }
 
-	protected Mastermind() {
-		this.game = new Game();
-		this.startController = new StartController(this.game);
-		this.proposalController = new ProposalController (this.game);
-		this.resumeController = new ResumeController (this.game);
-		this.view = this.createView(this.startController, this.proposalController, this.resumeController);
-	}
+    private void play() {
+        Controller controller;
+        do {
+            controller = this.controllers.get(this.session.getStateValue());
+            if (controller != null){
+                controller.control();
+            }
+        } while (controller != null);
+    }
 
-	protected abstract View createView(StartController startController, ProposalController proposalController, ResumeController resumeController);
-
-	protected void play() {
-		this.view.interact();
-	}
+    public static void main(String[] args) {
+        new Mastermind().play();
+    }
 
 }
